@@ -1,0 +1,42 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class IntegerSumCalculator {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter integers separated by spaces (e.g., 10 25 5):");
+        String inputLine = scanner.nextLine();
+        
+        String[] numbersAsStrings = inputLine.split("\\s+");
+        
+        List<Integer> numbersList = new ArrayList<>();
+        
+        System.out.println("\n--- Processing Numbers ---");
+
+        for (String str : numbersAsStrings) {
+            try {
+                int parsedInt = Integer.parseInt(str.trim());
+                numbersList.add(parsedInt); 
+                System.out.println("Parsed '" + str + "' -> Autoboxed int " + parsedInt + " to Integer and added to list.");
+            } catch (NumberFormatException e) {
+                System.out.println("Skipping invalid input: '" + str + "'");
+            }
+        }
+        
+        int totalSum = 0;
+        System.out.println("\n--- Calculating Sum ---");
+
+        for (Integer number : numbersList) {
+            totalSum += number; 
+            System.out.println("Unboxed Integer " + number + " to int -> Current Sum: " + totalSum);
+        }
+        
+        System.out.println("\n-------------------------");
+        System.out.println("✅ Final Sum: " + totalSum);
+        System.out.println("-------------------------");
+        
+        scanner.close();
+    }
+}
