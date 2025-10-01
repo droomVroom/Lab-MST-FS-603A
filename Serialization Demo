@@ -1,0 +1,67 @@
+import java.io.*;
+
+class Student implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    int studentID;
+    String name;
+    char grade;
+    transient String temporaryNotes;
+
+    public Student(int studentID, String name, char grade, String temporaryNotes) {
+        this.studentID = studentID;
+        this.name = name;
+        this.grade = grade;
+        this.temporaryNotes = temporaryNotes;
+    }
+
+    @Override
+    public String toString() {
+        return "Student Details:\n" +
+               "  ID: " + studentID + "\n" +
+               "  Name: " + name + "\n" +
+               "  Grade: " + grade + "\n" +
+               "  Temporary Notes (after deserialization): " + temporaryNotes;
+    }
+}
+
+public class SerializationDemo {
+    public static void main(String[] args) {
+        Student student = new Student(101, "Arjun Sharma", 'A', "Needs to submit the project.");
+        String filename = "student.ser";
+
+        System.out.println("▶️ Starting Serialization...");
+        try (FileOutputStream fileOut = new FileOutputStream(filename);
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+
+            out.writeObject(student);
+            System.out.println("✅ Student object has been serialized successfully.");
+            System.out.println("Original Object Data:\n" + student);
+            System.out.println("Data saved to " + filename);
+
+        } catch (IOException e) {
+            System.err.println("Serialization error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        System.out.println("\n----------------------------------------\n");
+
+        Student deserializedStudent = null;
+        System.out.println("◀️ Starting Deserialization...");
+        try (FileInputStream fileIn = new FileInputStream(filename);
+             ObjectInputStream in = new ObjectInputStream(fileIn)) {
+
+            deserializedStudent = (Student) in.readObject();
+            System.out.println("✅ Student object has been deserialized successfully.");
+
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("Deserialization error: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        if (deserializedStudent != null) {
+            System.out.println("\nRestored Object Data:");
+            System.out.println(deserializedStudent);
+        }
+    }
+}
